@@ -1,8 +1,6 @@
 package models
 
 import (
-	"time"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -20,8 +18,8 @@ type UserPlan struct{
 	Device []string `json:"device"`
 	Price int `json:"price"`
 	Type string `json:"type"`
-	SubcripedAt time.Time `json:"subcripedAt"`
-	RenewAt time.Time `json:"renewAt"`
+	SubcripedAt string `json:"subcripedAt"`
+	RenewAt string `json:"renewAt"`
 	Status string `json:"status"`
 
 }

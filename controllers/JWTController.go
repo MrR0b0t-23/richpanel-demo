@@ -18,7 +18,7 @@ type Claims struct {
 func GenerateJwtToken(emailId string) string {
 
 	currentTime := time.Now()
-	expirationTime := currentTime.Add(300 * time.Second)
+	expirationTime := currentTime.Add(10000 * time.Second)
 	// Create the JWT claims, which includes the username and expiry time
 	claims := &Claims{
 		EmailId: emailId,

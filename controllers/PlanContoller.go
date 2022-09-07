@@ -115,11 +115,23 @@ func ActivePlan() gin.HandlerFunc {
 			return
 		}
 		
-		// getting user plan details
+
+		// getting user	 plan details
 		var plan models.UserPlan
 		err := subcriptionCollection.FindOne(c, bson.M{"emailid": emailId}).Decode(&plan)
 
+		//result, err := paylogCollection.InsertOne(ctx, plan)
+
 		//if already subscriped update the subscription, else create new subscription
+		
+		renew := time.Now().Add( 356*(24*time.Hour))
+		
+		if resp.Type == "Monthly"{
+			renew = time.Now().Add( 30*(24*time.Hour))
+		}
+		
+		
+		
 		if err != nil {
 			var newplan = models.UserPlan{
 				Id: primitive.NewObjectID(),
@@ -128,8 +140,8 @@ func ActivePlan() gin.HandlerFunc {
 				Device: resp.Device,
 				Price: resp.Price,
 				Type: resp.Type,
-				SubcripedAt: time.Now(), 
-				RenewAt: time.Now().Add(8760* time.Hour),
+				SubcripedAt: time.Now().Format("Jan 02, 2006"), 
+				RenewAt: renew.Format("Jan 02, 2006"),
 				Status: "active",
 			}
 	
@@ -150,7 +162,7 @@ func ActivePlan() gin.HandlerFunc {
 			"type": resp.Type,
 			"status": "active",
 		}
-	
+		
 		result, err := subcriptionCollection.UpdateOne(ctx, bson.M{"_id": plan.Id}, bson.M{"$set": update})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError,gin.H{"data": err.Error()})
@@ -158,6 +170,7 @@ func ActivePlan() gin.HandlerFunc {
 		}
 		
 		if result.MatchedCount == 1{
+
 			c.JSON(http.StatusOK, gin.H{"data": "Subscription Updated"})
 			return 
 		}

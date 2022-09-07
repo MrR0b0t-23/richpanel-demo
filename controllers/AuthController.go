@@ -102,7 +102,7 @@ type JwtResponse struct{
 
 func OnLoad() gin.HandlerFunc{
 	return func(c *gin.Context){
-		var _, cancel = context.WithTimeout(context.Background(), 10000*time.Second)
+		var _, cancel = context.WithTimeout(context.Background(), 100000*time.Second)
 		defer cancel()
 		
 		var jwtRes JwtResponse
