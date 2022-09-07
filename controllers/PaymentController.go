@@ -67,7 +67,7 @@ func CreatePaymentIntent() gin.HandlerFunc {
 		priceId := c.Param("priceId")
 		defer cancel()
 		params := &stripe.PaymentIntentParams{
-			Amount:   stripe.Int64(AmountCalucate(priceId),
+			Amount:   stripe.Int64(AmountCalucate(priceId)),
 			Currency: stripe.String(string(stripe.CurrencyINR)),
 			AutomaticPaymentMethods: &stripe.PaymentIntentAutomaticPaymentMethodsParams{
 			  Enabled: stripe.Bool(true),
