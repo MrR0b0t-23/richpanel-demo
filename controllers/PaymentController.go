@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/stripe/stripe-go/v72"
+	"github.com/stripe/stripe-go/v72/price"
 	"github.com/stripe/stripe-go/v72/paymentintent"
 	"github.com/stripe/stripe-go/webhook"
 )
@@ -54,15 +55,19 @@ func HandleWebhook() gin.HandlerFunc {
 }
 }
 
+func AmountCalucate(priceId string) int64{
+	p, _ := price.Get(priceId, nil)
+	return p.UnitAmount*100
+}
+
 func CreatePaymentIntent() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		stripe.Key = "sk_test_51LeCTcSDyoGuF7sjCJmuY2dYTbdW7hCY0UCkeKYjWpQkPyTLxhLhHaZKNLhJ4iRLtC4Qq6fNMTjF9S8QhzEk3sTq00VQ1ogCKb"
 		var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		priceId := c.Param("priceId")
 		defer cancel()
-		log.Printf(priceId)
 		params := &stripe.PaymentIntentParams{
-			Amount:   stripe.Int64(1000),
+			Amount:   stripe.Int64(AmountCalucate(priceId),
 			Currency: stripe.String(string(stripe.CurrencyINR)),
 			AutomaticPaymentMethods: &stripe.PaymentIntentAutomaticPaymentMethodsParams{
 			  Enabled: stripe.Bool(true),
