@@ -57,7 +57,7 @@ func HandleWebhook() gin.HandlerFunc {
 
 func AmountCalucate(priceId string) int64{
 	p, _ := price.Get(priceId, nil)
-	return p.UnitAmount*100
+	return p.UnitAmount
 }
 
 func CreatePaymentIntent() gin.HandlerFunc {
